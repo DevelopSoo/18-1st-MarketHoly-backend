@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS =['*']
 
+SLASH_APPEND = False
 
 # Application definition
 
@@ -39,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'user',
+    'product',
+    'order',
 ]
 
 MIDDLEWARE = [
