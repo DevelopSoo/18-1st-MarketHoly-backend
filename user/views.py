@@ -21,13 +21,13 @@ class LoginView(View):
             if not exist_user:
                 return JsonResponse({'message':'INVALID_USER'}, status = 400)
             
-            user_info      = User.objects.filter(email=email)
-            check_password = bcrypt.checkpw(password.encode('utf-8'), user_info.first().password.encode('utf-8'))
+            user_info      = User.objects.get(email=email)
+            check_password = bcrypt.checkpw(password.encode('utf-8'), user_info.password.encode('utf-8'))
 
             if not check_password:
                 return JsonResponse({'message':'INVALID_USER'}, status = 400)
 
-            access_token = jwt.encode({'user_id':user_info.first().id}, SECRET_KEY, algorithm='HS256')
+            access_token = jwt.encode({'user_id':user_info.id}, SECRET_KEY, algorithm='HS256')
             return JsonResponse({'message':'SUCCESS', 'access_token':access_token}, status=200)
 
         except KeyError:
