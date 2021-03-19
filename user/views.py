@@ -17,19 +17,21 @@ class LoginView(View):
             email    = data['email']
             password = data['password']
 
-            user = User.objects.get(email=email)
-
-            if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-                access_token = jwt.encode({'user_id':user.id}, SECRET_KEY, algorithm='HS256')
-                return JsonResponse({'message':'SUCCESS', 'access_token':access_token}, status=200)
+            exist_user = User.objects.filter(email=email).exists()
+            if not exist_user:
+                return JsonResponse({'message':'INVALID_USER'}, status = 400)
             
-            return JsonResponse({'message':'아이디 또는 비밀번호 오류입니다.'}, status = 400)
+            user_info      = User.objects.filter(email=email)
+            check_password = bcrypt.checkpw(password.encode('utf-8'), user_info.first().password.encode('utf-8'))
+
+            if not check_password:
+                return JsonResponse({'message':'INVALID_USER'}, status = 400)
+
+            access_token = jwt.encode({'user_id':user_info.first().id}, SECRET_KEY, algorithm='HS256')
+            return JsonResponse({'message':'SUCCESS', 'access_token':access_token}, status=200)
 
         except KeyError:
-            return JsonResponse({'message':'회원정보를 입력하세요.'}, status=400)
+            return JsonResponse({'message':'KeyError'}, status=400)
         
         except json.decoder.JSONDecodeError:
-            return JsonResponse({'message':'회원정보를 입력하세요.'}, status=400)
-
-        except User.DoesNotExist:
-            return JsonResponse({'message':'존재하지 않는 사용자입니다.'}, status=404)
+            return JsonResponse({'message':'JSONDecodeError'}, status=400)
