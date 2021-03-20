@@ -35,36 +35,36 @@ class SignUpView(View):
             regex_for_email = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
             
-            Unauthroized_response = JsonResponse({"message": "UNAUTHORIZED"}, status=401)
+            signup_fail_response = JsonResponse({"message": "Bad Request"}, status=400)
 
             if not email:
-                return Unauthroized_response
+                return signup_fail_response
 
             if not regex_for_email.match(email):
-                return Unauthroized_response
+                return signup_fail_response
             
             if User.objects.filter(email=email).exists():
                 return JsonResponse({"message": "Conflict"}, status=409)
             
             # 비밀번호 검사
             if not password:
-                return Unauthroized_response
+                return signup_fail_response
 
             if len(password) < 10:
-                return Unauthroized_response
+                return signup_fail_response
 
             # 비밀번호 암호화
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             decoded_hashed_pw = hashed_password.decode('utf-8') 
             
             if not name:
-                return Unauthroized_response
+                return signup_fail_response
             
             if not phone_number:
-                return Unauthroized_response
+                return signup_fail_response
             
             if not zip_code and not address:
-                return Unauthroized_response
+                return signup_fail_response
         
             # 전화 번호 정규식 찾아보기 
             # regex_for_phone_number = re.compile('\d{9}')
