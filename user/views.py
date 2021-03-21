@@ -9,7 +9,7 @@ from django.core.exceptions  import ValidationError
 from user.models import User, Address
 from my_settings import SECRET_KEY
 
-
+MIN_PASSWORD_LENGTH = 10
 # 문제점
 # 1. email과 같은 key 값이 2개 이상 들어올 때는??
 # 2. 이벤트 SNS, 메시지 수신 여부
@@ -34,37 +34,26 @@ class SignUpView(View):
             # 이메일 정규식 검사
             regex_for_email = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
-            
-            signup_fail_response = JsonResponse({"message": "Bad Request"}, status=400)
 
-            if not email:
-                return signup_fail_response
+            if not email or not regex_for_email.match(email):
+                return JsonResponse({"message": "INVALID_EMAIL"}, status=400)
 
-            if not regex_for_email.match(email):
-                return signup_fail_response
-            
             if User.objects.filter(email=email).exists():
-                return JsonResponse({"message": "Conflict"}, status=409)
+                return JsonResponse({"message": "EMAIL_ALREADY_EXIST"}, status=409)
             
             # 비밀번호 검사
-            if not password:
-                return signup_fail_response
-
-            if len(password) < 10:
-                return signup_fail_response
+            if not password or len(password) < MIN_PASSWORD_LENGTH:
+                return JsonResponse({"message": "INVALID_PASSWORD"}, status=400)
 
             # 비밀번호 암호화
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             decoded_hashed_pw = hashed_password.decode('utf-8') 
             
-            if not name:
-                return signup_fail_response
-            
-            if not phone_number:
-                return signup_fail_response
+            if not name or not phone_number:
+                return JsonResponse({"message": "INVALID_USER_INFO"}, status=400)
             
             if not zip_code and not address:
-                return signup_fail_response
+                return JsonResponse({"message": "INVALID_ADDRESS"}, status=400)
         
             # 전화 번호 정규식 찾아보기 
             # regex_for_phone_number = re.compile('\d{9}')
