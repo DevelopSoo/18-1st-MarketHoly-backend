@@ -34,7 +34,7 @@ class RecommendView(View):
             
 
 
-            result = []
+            listgoods = []
             for product in random_product_list:
             # 할인율이 있는 경우 없는 경우 나누기
                 if product.discountrate_set.all():
@@ -54,9 +54,9 @@ class RecommendView(View):
 
                 
 
-                result.append(product_info)
+                listgoods.append(product_info)
             
-            return JsonResponse({"result": result}, status=200)
+            return JsonResponse({"listgoods": listgoods}, status=200)
 
         # Sample larger than population or is negative
         except ValueError:
