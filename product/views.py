@@ -14,11 +14,8 @@ class CategoryView(View):
         
         for category in categories:
             sub_categories      = SubCategory.objects.filter(category=category)
-            sub_categories_list = []
+            sub_categories_list = [sub_category.name for sub_category in sub_categories]
             
-            for sub_category in sub_categories:
-                sub_categories_list.append(sub_category.name)
-
             category_by_id = {}
 
             category_by_id['id']            = category.id
