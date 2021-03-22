@@ -18,23 +18,26 @@ class RecommendView(View):
             random_categories = random.sample(list(categories), 8) # 랜덤으로 뽑을 개수. 나중에는 이 개수를 12개로 늘린다.
             
             # 랜덤 카테고리를 기준으로 랜덤 서브 카테고리를 1개씩 추출
-            random_sub_category_list = []
+            # random_sub_category_list = []
+            # for category in random_categories:
+            #     sub_categories      = category.subcategory_set.all()
+            #     random_sub_category = random.choice(sub_categories)
 
-            for category in random_categories:
-                sub_categories      = category.subcategory_set.all()
-                random_sub_category = random.choice(sub_categories)
-
-                random_sub_category_list.append(random_sub_category)
+            #     random_sub_category_list.append(random_sub_category)
+            
+            #리스트 comprehension
+            random_sub_category_list = [random.choice(category.subcategory_set.all()) for category in random_categories]
             
             # 랜덤 서브 카테고리 1개당 1개의 랜덤 상품을 추출 
-            random_product_list = []
+            # random_product_list = []
 
-            for sub_category in random_sub_category_list:
-                items          = sub_category.product_set.all()
-                random_product = random.choice(items)
+            # for sub_category in random_sub_category_list:
+            #     items          = sub_category.product_set.all()
+            #     random_product = random.choice(items)
 
-                random_product_list.append(random_product)
-            
+            #     random_product_list.append(random_product)
+            random_sub_category_list = [random.choice(sub_category.product_set.all())for sub_category in random_sub_category_list]
+
 
             listgoods = []
             for product in random_product_list:
@@ -42,16 +45,16 @@ class RecommendView(View):
                 if product.discountrate_set.all():
                     discount_rate = product.discountrate_set.all()[0].discount_rate
                     product_info  = {
-                        "image"        : product.image_url,
+                        "image_url"    : product.image_url,
                         "name"         : product.name,
                         "price"        : product.price,
                         "discount_rate": discount_rate
                     }
                 else:
                     product_info = {
-                        "image": product.image_url,
-                        "name" : product.name,
-                        "price": product.price
+                        "image_url": product.image_url,
+                        "name"     : product.name,
+                        "price"    : product.price
                     }
 
                 listgoods.append(product_info)
