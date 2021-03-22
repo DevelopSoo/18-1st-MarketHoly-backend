@@ -36,7 +36,7 @@ class RecommendView(View):
             #     random_product = random.choice(items)
 
             #     random_product_list.append(random_product)
-            random_sub_category_list = [random.choice(sub_category.product_set.all())for sub_category in random_sub_category_list]
+            random_product_list = [random.choice(sub_category.product_set.all())for sub_category in random_sub_category_list]
 
 
             listgoods = []
