@@ -10,18 +10,9 @@ class CategoryView(View):
     def get(self, request):
         categories = Category.objects.all()
 
-        result = []
-        
-        for category in categories:
-            sub_categories      = SubCategory.objects.filter(category=category)
-            sub_categories_list = [sub_category.name for sub_category in sub_categories]
-            
-            category_by_id = {}
-
-            category_by_id['id']            = category.id
-            category_by_id['category_name'] = category.name
-            category_by_id['subcategories'] = sub_categories_list
-
-            result.append(category_by_id)
+        result = [{'id': category.id,
+                   'category' : category.name,
+                   'subcategories': sub_category.name} for category in categories
+                   for sub_category in SubCategory.objects.filter(category=category)]
 
         return JsonResponse({'result': result}, status=200)
