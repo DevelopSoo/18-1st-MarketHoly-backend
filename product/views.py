@@ -26,9 +26,10 @@ class BestListView(View):
                     }
                 else:
                     product_info = {
-                        "image_url": product.image_url,
-                        "name"     : product.name,
-                        "price"    : product.price
+                        "image_url"    : product.image_url,
+                        "name"         : product.name,
+                        "price"        : product.price,
+                        "discount_rate": None
                     }
 
                 best_products.append(product_info)
