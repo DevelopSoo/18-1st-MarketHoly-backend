@@ -16,26 +16,23 @@ class RecommendView(View):
             random_sub_category_list = [random.choice(category.subcategory_set.all()) for category in random_categories]
             random_product_list      = [random.choice(sub_category.product_set.all()) for sub_category in random_sub_category_list]
 
-            listgoods = []
-            for product in random_product_list:
+            listgoods = [
+                {
+                "image_url"    : product.image_url, 
+                "name"         :product.name, 
+                "price"        : product.price,
+                "discount_rate": discount_rate
+                } 
+                if DiscountRate.objects.filter(product=product).exists() 
+                else 
+                {
+                "image_url"    : product.image_url,
+                "name"         : product.name,
+                "price"        : product.price,
+                "discount_rate": None
+                } 
+                for product in random_product_list]
 
-                if DiscountRate.objects.filter(product=product).exists():
-                    discount_rate = product.discountrate_set.all()[0].discount_rate
-                    product_info  = {
-                        "image_url"    : product.image_url,
-                        "name"         : product.name,
-                        "price"        : product.price,
-                        "discount_rate": discount_rate
-                    }
-                else:
-                    product_info = {
-                        "image_url": product.image_url,
-                        "name"     : product.name,
-                        "price"    : product.price
-                    }
-
-                listgoods.append(product_info)
-            
             return JsonResponse({"listgoods": listgoods}, status=200)
 
         except ValueError:
