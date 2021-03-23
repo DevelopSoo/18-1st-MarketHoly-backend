@@ -17,19 +17,6 @@ class DetailProductView(View):
 
             product = Product.objects.get(id=product_id)
             
-            name            = product.name
-            description     = product.description
-            image_url       = product.image_url
-            price           = product.price
-            stock           = product.stock
-            content         = product.content
-            uploaded_at     = product.uploaded_at
-            sales_unit      = product.sales_unit if product.sales_unit else []
-            amount          = product.amount if product.amount else []
-            origin          = product.origin if product.origin else []
-            expiration_date = product.expiration_date if product.expiration_date else []
-            storage_method  = product.storage_method.name if product.storage_method else []
-            
             have_discount = DiscountRate.objects.filter(product=product).exists()
             if have_discount:
                 discount      = DiscountRate.objects.get(product=product)
@@ -38,18 +25,18 @@ class DetailProductView(View):
                 discount_rate = []
             
             info = {
-                'name': name,
-                'description': description,
-                'image_url': image_url,
-                'price': price,
-                'stock': stock,
-                'content': content,
-                'uploaded_at': uploaded_at,
-                'sales_unit': sales_unit,
-                'amount': amount,
-                'origin': origin,
-                'storage_method': storage_method,
-                'expiration_date': expiration_date,
+                'name': product.name,
+                'description': product.description,
+                'image_url': product.image_url,
+                'price': product.price,
+                'stock': product.stock,
+                'content': product.content,
+                'uploaded_at': product.uploaded_at,
+                'sales_unit': product.sales_unit if product.sales_unit else [],
+                'amount': product.amount if product.amount else [],
+                'origin': product.origin if product.origin else [],
+                'storage_method': product.storage_method.name if product.storage_method else [],
+                'expiration_date': product.expiration_date if product.expiration_date else [],
                 'discount_rate': discount_rate,
             }
 
