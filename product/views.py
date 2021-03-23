@@ -7,9 +7,13 @@ from .models import *
 
 
 class MDRecommendView(View):
-    def get(self, request, category_id):
+    def get(self, request):
+        limit = request.GET['limit']
+        offset = request.GET['offset']
+        category_id = offset/limit
 
         category = Category.objects.get(id=category_id)
+
         sub_categories = category.subcategory_set.all()
         random_sub_categories = random.sample(list(sub_categories), 3)
 
@@ -33,6 +37,5 @@ class MDRecommendView(View):
                     }
 
                 product_list_by_category.append(product_dict)
-
+                # product_list_by_category = [if DiscountRate.objects.filter(product=product).exists() for product in products]
         return JsonResponse({"product_list_by_category": product_list_by_category}, status=200)
-
