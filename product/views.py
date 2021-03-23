@@ -28,7 +28,8 @@ class NewListView(View):
                     product_info = {
                         "image_url": product.image_url,
                         "name"     : product.name,
-                        "price"    : product.price
+                        "price"    : product.price,
+                        "discount_rate": None
                     }
 
                 new_products.append(product_info)
