@@ -21,6 +21,7 @@ class CategoryListDetail(View):
                         if DiscountRate.objects.filter(product=product).exists():
                             discount_rate = product.discountrate_set.all()[0].discount_rate
                             product_info = {
+                                "id"  : product.id,
                                 "name": product.name,
                                 "image": product.image_url,
                                 "price": product.price,
@@ -28,6 +29,7 @@ class CategoryListDetail(View):
                             }
                         else:
                             product_info = {
+                                "id"  : product.id,
                                 "name": product.name,
                                 "image": product.image_url, 
                                 "price":product.price
