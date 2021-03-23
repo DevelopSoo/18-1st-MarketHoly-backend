@@ -20,22 +20,16 @@ class MDRecommendView(View):
         product_list_by_category = []
         for sub_category in random_sub_categories:
             two_products = sub_category.product_set.all().order_by('-stock')[:2]
-            for product in two_products:
-                if DiscountRate.objects.filter(product=product).exists():
-                    discount_rate = product.discount_rate.all()[0].discount_rate
-                    product_dict = {
-                        "name": product.name,
-                        "image": product.image_url,
-                        "price": product.price,
-                        "discount_rate": discount_rate
-                    }
-                else:
-                    product_dict = {
-                        "name": product.name,
-                        "image": product.image_url,
-                        "price": product.price,
-                    }
-
-                product_list_by_category.append(product_dict)
-                # product_list_by_category = [if DiscountRate.objects.filter(product=product).exists() for product in products]
+            product_list_by_category = [
+                    {"name": product.name,
+                    "image": product.image_url,
+                    "price": product.price,
+                    "discount_rate": product.discountrate_set.all()[0].discount_rate}
+                    if DiscountRate.objects.filter(product=product).exists() 
+                    else 
+                    {"name": product.name,
+                    "image": product.image_url,
+                    "price": product.price,
+                    "discount_rate": None}
+                    for product in two_products]
         return JsonResponse({"product_list_by_category": product_list_by_category}, status=200)
