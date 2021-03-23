@@ -21,7 +21,7 @@ class RecommendView(View):
                 "image_url"    : product.image_url, 
                 "name"         :product.name, 
                 "price"        : product.price,
-                "discount_rate": discount_rate
+                "discount_rate": product.discount_rate.all()[0].discount_rate
                 } 
                 if DiscountRate.objects.filter(product=product).exists() 
                 else 
