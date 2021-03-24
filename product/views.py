@@ -17,7 +17,7 @@ class CategoryView(View):
                     'subcategories': [
                         {
                             "sub_category_id": sub_category.id,
-                            "sub_ctegory_name": sub_category.name
+                            "sub_category_name": sub_category.name
                         } for sub_category in SubCategory.objects.filter(category=category)
                     ]
                 } for category in categories ]
