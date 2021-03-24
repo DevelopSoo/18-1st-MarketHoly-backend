@@ -91,7 +91,6 @@ class CategoryView(View):
 
         return JsonResponse({'result': result}, status=200)
 
-<<<<<<< HEAD
 
 # MD 추천 
 class MDRecommendView(View):
@@ -124,8 +123,6 @@ class MDRecommendView(View):
         return JsonResponse({"product_list_by_category": product_list_by_category}, status=200)
 
 
-=======
->>>>>>> main
 class DetailProductView(View):
     def get(self, request, product_id):
     
@@ -167,9 +164,6 @@ class DetailProductView(View):
                               'image_url': product.image_url,
                               'price': product.price
                               } for product in random_products]
-        
-<<<<<<< HEAD
+
         return JsonResponse({'info': info, 'related_products': related_products}, status=200)
-=======
-        return JsonResponse({'info': info, 'related_products': related_products}, status=200)
->>>>>>> main
+
