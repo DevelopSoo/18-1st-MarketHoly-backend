@@ -51,17 +51,21 @@ class ProductView(View):
         category_id     = request.GET.get('category')
         sub_category_id = request.GET.get('sub-category')
         sort            = request.GET.get('sort')
-           
+        page            = int(request.GET.get('page', 1))
+
+        PAGE_LIMIT = 30
+
         sort_keyword = {
             "new" : "-uploaded_at",
             "best": "-stock"
         }   
+
         # 카테고리 리스트 표출
         if category_id or sub_category_id:
-            products = Product.objects.filter(Q(sub_category__category_id=category_id)|Q(sub_category_id=sub_category_id))
+            products = Product.objects.filter(Q(sub_category__category_id=category_id)|Q(sub_category_id=sub_category_id))[(page-1)*PAGE_LIMIT:page*PAGE_LIMIT]
         else:
-            products = Product.objects.all().order_by(sort_keyword[sort])
-
+            products = Product.objects.all().order_by(sort_keyword[sort])[(page-1)*PAGE_LIMIT:page*PAGE_LIMIT]
+        
         product_list = [                   
             {
                 "product_id"   : product.id,
@@ -72,6 +76,6 @@ class ProductView(View):
                 if DiscountRate.objects.filter(product=product).exists() else None
             } for product in products
         ]
-    
+
         return JsonResponse({"product_list": product_list}, status=200)
  
