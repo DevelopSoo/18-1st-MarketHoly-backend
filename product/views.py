@@ -1,3 +1,4 @@
+# MD 추천 
 import random 
 
 from django.views import View
@@ -20,22 +21,26 @@ class MDRecommendView(View):
         product_list_by_category = []
         for sub_category in random_sub_categories:
             two_products = sub_category.product_set.all().order_by('-stock')[:2]
-            
-            product_list_by_category = [
-                    {
-                    "name": product.name,
-                    "image_url": product.image_url,
-                    "price": product.price,
-                    "discount_rate": product.discountrate_set.all()[0].discount_rate
-                    }
-                    if DiscountRate.objects.filter(product=product).exists() 
-                    else 
-                    {
-                    "name": product.name,
-                    "image_url": product.image_url,
-                    "price": product.price,
-                    "discount_rate": None
-                    }
-                    for product in two_products]
+            for product in two_products:
+                if product.to_product.all():
+                    continue
+                else:
+                    if DiscountRate.objects.filter(product=product).exists():
+                        discount_rate = product.discountrate_set.all()[0].discount_rate
+                        product_info = {
+                            "name": product.name,
+                            "image_url": product.image_url,
+                            "price": product.price,
+                            "discount_rate": product.discountrate_set.all()[0].discount_rate
+                        }         
+                    else:
+                        product_info = {
+                            "name": product.name,
+                            "image_url": product.image_url,
+                            "price": product.price,
+                            "discount_rate": None
+                        }
+
+                    product_list_by_category.append(product_info)
 
         return JsonResponse({"product_list_by_category": product_list_by_category}, status=200)
