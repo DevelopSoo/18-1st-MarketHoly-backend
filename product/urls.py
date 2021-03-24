@@ -1,8 +1,11 @@
 from django.urls import path
 
-from .views import RecommendView, MDRecommendView 
+from product.views import RecommendView, MDRecommendView, CategoryView, ProductView, DetailProductView 
 
 urlpatterns= [
+    path('/category', CategoryView.as_view()),
     path('/recommendation', RecommendView.as_view()),
-    path('/mdrecommendation', MDRecommendView.as_view())
+    path('/mdrecommendation', MDRecommendView.as_view()),
+    path('/detail/<int:product_id>', DetailProductView.as_view()),
+    path('', ProductView.as_view()),
 ]
