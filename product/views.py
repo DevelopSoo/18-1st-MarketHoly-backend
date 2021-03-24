@@ -7,8 +7,8 @@ from django.views import View
 from product.models import SubCategory, Product, DiscountRate 
 
 class DetailProductView(View):
-    def get(self, request):
-        product_id    = request.GET['id']
+    def get(self, request, product_id):
+    
         exist_product = Product.objects.filter(id=product_id).exists()
         if not exist_product:
             return JsonResponse({'message': 'PRODUCT_DOES_NOT_EXIST'}, status=400)
