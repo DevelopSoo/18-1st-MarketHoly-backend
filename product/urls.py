@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .views import CategoryListDetail
+from .views import RecommendView, CategoryListDetail
 
 urlpatterns= [
-    path('/categorylistdetail', CategoryListDetail.as_view()),
+    path('/recommendation', RecommendView.as_view()),
+    path('/categorylistdetail', CategoryListDetail.as_view())
 ]
