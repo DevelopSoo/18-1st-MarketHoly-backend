@@ -20,9 +20,10 @@ class DetailProductView(View):
             discount      = DiscountRate.objects.get(product=product)
             discount_rate = discount.discount_rate
         else:
-            discount_rate = 0
+            discount_rate = None
         
         info = {
+            'id': product_id,
             'name': product.name,
             'description': product.description,
             'image_url': product.image_url,
