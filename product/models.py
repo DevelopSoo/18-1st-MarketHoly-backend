@@ -57,7 +57,7 @@ class DiscountRate(models.Model):
 
 class DailySpecialDiscount(models.Model):
     product             = models.ForeignKey('Product', on_delete=models.CASCADE)
-    daily_discount_rate = models.IntegerField()
+    daily_discount_rate = models.DecimalField(max_digits=10, decimal_places=5)
     start_date          = models.DateField()
 
     class Meta:
