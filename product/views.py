@@ -18,8 +18,9 @@ class RecommendView(View):
 
             listgoods = [
                 {
+                "product_id"   : product.id,
                 "image_url"    : product.image_url, 
-                "name"         :product.name, 
+                "name"         : product.name, 
                 "price"        : product.price,
                 "discount_rate": product.discountrate_set.get(product_id=product.id).discount_rate 
                 if DiscountRate.objects.filter(product=product).exists() 
@@ -53,13 +54,14 @@ class MDRecommendView(View):
             two_products = sub_category.product_set.all().order_by('-stock')[:2]
             for product in two_products:
                 product_info = {
-                    "name": product.name,
-                    "image_url": product.image_url,
-                    "price": product.price,
+                    'product_id'   : product.id,
+                    "name"         : product.name,
+                    "image_url"    : product.image_url,
+                    "price"        : product.price,
                     "discount_rate": product.discountrate_set.get(product_id=product.id).discount_rate 
                     if DiscountRate.objects.filter(product=product).exists() 
                     else None
-                    }         
+                }         
                 
                 product_list_by_category.append(product_info)
 
