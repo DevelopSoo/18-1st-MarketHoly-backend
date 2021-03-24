@@ -1,10 +1,11 @@
-import random 
+import random
+from datetime import date
 
 from django.db.models import Q
 from django.views import View
 from django.http  import JsonResponse
 
-from .models import Category, SubCategory, Product, DiscountRate
+from .models import Category, SubCategory, Product, DiscountRate, DailySpecialDiscount
 
 
 # 이 상품 어때요?
@@ -96,4 +97,20 @@ class CategoryView(View):
                     ]
                 } for category in categories ]
 
+
+class DailySpecialProductView(View):
+    def get(self, request):
+        start_date     = date.today()
+        daily_products = DailySpecialDiscount.objects.filter(start_date=start_date)
+
+        result = [ {
+                     'product_id':daily_product.product.id,
+                     'name':daily_product.product.name,
+                     'image_url':daily_product.product.image_url,
+                     'price':daily_product.product.price,
+                     'daily_discount_rate': daily_product.daily_discount_rate,
+                     'start_date':start_date
+                    } for daily_product in daily_products
+                ]
+        
         return JsonResponse({'result': result}, status=200)
