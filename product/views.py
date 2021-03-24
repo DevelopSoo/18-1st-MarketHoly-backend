@@ -21,19 +21,12 @@ class RecommendView(View):
                 {
                 "product_id"   : product.id,
                 "image_url"    : product.image_url, 
-                "name"         :product.name, 
+                "name"         : product.name, 
                 "price"        : product.price,
-                "discount_rate": product.discount_rate.all()[0].discount_rate
-                } 
+                "discount_rate": product.discountrate_set.get(product_id=product.id).discount_rate 
                 if DiscountRate.objects.filter(product=product).exists() 
-                else 
-                {
-                "product_id"   : product_id,
-                "image_url"    : product.image_url,
-                "name"         : product.name,
-                "price"        : product.price,
-                "discount_rate": None
-                } 
+                else None
+                }
                 for product in random_product_list]
 
             return JsonResponse({"listgoods": listgoods}, status=200)
@@ -98,6 +91,41 @@ class CategoryView(View):
 
         return JsonResponse({'result': result}, status=200)
 
+<<<<<<< HEAD
+
+# MD 추천 
+class MDRecommendView(View):
+    def get(self, request):
+        limit       = request.GET.get('limit', 6)
+        offset      = request.GET.get('offset', 6)
+        category_id = int(offset)/int(limit)
+
+        category = Category.objects.get(id=category_id)
+
+        sub_categories        = category.subcategory_set.all()
+        random_sub_categories = random.sample(list(sub_categories), 3)
+
+        product_list_by_category = []
+        for sub_category in random_sub_categories:
+            two_products = sub_category.product_set.all().order_by('-stock')[:2]
+            for product in two_products:
+                product_info = {
+                    'product_id'   : product.id,
+                    "name"         : product.name,
+                    "image_url"    : product.image_url,
+                    "price"        : product.price,
+                    "discount_rate": product.discountrate_set.get(product_id=product.id).discount_rate 
+                    if DiscountRate.objects.filter(product=product).exists() 
+                    else None
+                }         
+                
+                product_list_by_category.append(product_info)
+
+        return JsonResponse({"product_list_by_category": product_list_by_category}, status=200)
+
+
+=======
+>>>>>>> main
 class DetailProductView(View):
     def get(self, request, product_id):
     
@@ -140,4 +168,8 @@ class DetailProductView(View):
                               'price': product.price
                               } for product in random_products]
         
+<<<<<<< HEAD
         return JsonResponse({'info': info, 'related_products': related_products}, status=200)
+=======
+        return JsonResponse({'info': info, 'related_products': related_products}, status=200)
+>>>>>>> main
