@@ -3,7 +3,7 @@ import random
 from django.views import View
 from django.http  import JsonResponse
 
-from .models import *
+from .models import Category, SubCategory, Product, DiscountRate
 
 
 # 이 상품 어때요?
@@ -40,8 +40,8 @@ class RecommendView(View):
 # MD 추천 
 class MDRecommendView(View):
     def get(self, request):
-        limit       = request.GET['limit']
-        offset      = request.GET['offset']
+        limit       = request.GET.get('limit', 6)
+        offset      = request.GET.get('offset', 6)
         category_id = int(offset)/int(limit)
 
         category = Category.objects.get(id=category_id)
