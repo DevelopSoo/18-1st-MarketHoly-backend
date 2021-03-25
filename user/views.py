@@ -110,3 +110,9 @@ class LoginView(View):
         except json.decoder.JSONDecodeError:
             return JsonResponse({'message':'JSONDecodeError'}, status=400)
 
+@login_required
+class NameView(View):
+    def get(self, request):
+        user = request.user
+        name = user.name
+        return JsonResponse({'name': name}, status=200)
