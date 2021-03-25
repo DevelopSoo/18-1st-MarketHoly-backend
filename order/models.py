@@ -31,8 +31,8 @@ class SavedItem(models.Model):
 
 class Cart(models.Model):
     order    = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='cart_order')
-    product  = models.ForeignKey('product.Product', on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    product  = models.ForeignKey('product.Product', on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'carts'
