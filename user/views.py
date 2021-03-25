@@ -6,8 +6,9 @@ from django.http             import JsonResponse
 from django.db               import transaction
 from django.core.exceptions  import ValidationError
 
-from user.models import User, Address
-from my_settings import SECRET_KEY
+from utils.decorator import login_required
+from user.models     import User, Address
+from my_settings     import SECRET_KEY
 
 MIN_PASSWORD_LENGTH = 10
 # 문제점
@@ -70,7 +71,7 @@ class SignUpView(View):
                                    detail_address=detail_address)
                 
 
-            return JsonResponse({"message": "Sign Up SUCCESS"}, status=200)
+            return JsonResponse({"message": "Sign Up SUCCESS","status": 200}, status=200)
 
         except KeyError:
             return JsonResponse({"message": "KEY_ERROR"}, status=500)
