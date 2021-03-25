@@ -96,6 +96,8 @@ class CategoryView(View):
                         } for sub_category in SubCategory.objects.filter(category=category)
                     ]
                 } for category in categories ]
+        
+        return JsonResponse({'result': result}, status=200)
 
 
 class DailySpecialProductView(View):
@@ -103,7 +105,7 @@ class DailySpecialProductView(View):
         start_date     = date.today()
         daily_products = DailySpecialDiscount.objects.filter(start_date=start_date)
 
-        result = [ {
+        dailyspecial = [ {
                      'product_id':daily_product.product.id,
                      'name':daily_product.product.name,
                      'image_url':daily_product.product.image_url,
@@ -113,4 +115,4 @@ class DailySpecialProductView(View):
                     } for daily_product in daily_products
                 ]
         
-        return JsonResponse({'result': result}, status=200)
+        return JsonResponse({'dailyspecial': dailyspecial}, status=200)
